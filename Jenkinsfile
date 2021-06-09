@@ -26,12 +26,14 @@ pipeline {
         git credentialsId: 'git-repo-creds', url: 'git@github.com:varunsharma5/apache.git'
       }
     }
+/*
     stage ('Install Kitchen Docker gem') {
       steps {
         sh 'sudo apt-get install -y make gcc'
         sh 'sudo chef gem install kitchen-docker'
       }
     }
+*/    
     stage ('Run Kitchen Destroy') {
       steps {
         sh 'sudo kitchen destroy'
@@ -60,6 +62,17 @@ pipeline {
     stage ('Request Input') {
       steps {
         input 'Please approve the build'
+      }
+    }
+    stage ('Upload to Chef Infra Server, Converge Nodes') {
+      steps {
+      withCredentials([zip(credentialsId: 'chef-starter.zip', variable: 'CHEFREPO')]) {
+          sh 'chef install $WORKSPACE/Policyfile.rb -c $CHEFREPO/chef-repo/.chef/config.rb'
+          sh 'chef push prod $WORKSPACE/Policyfile.lock.json -c $CHEFREPO/chef-repo/.chef/config.rb'
+          withCredentials([sshUserPrivateKey(credentialsId: 'agent-key', keyFileVariable: 'agentKey')]) {
+            sh "knife ssh 'policy_name:apache' -x ubuntu -i $agentKey 'sudo chef-client' -c $CHEFREPO/chef-repo/.chef/config.rb"
+          }
+        }
       }
     }
   }
