@@ -59,20 +59,22 @@ pipeline {
         slackSend color: 'warning', message: "Mr Varun: Please approve ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JOB_URL} | Open>)"
       }
     }
+    /*
     stage ('Request Input') {
       steps {
         input 'Please approve the build'
       }
     }
+    */
     stage ('Upload to Chef Infra Server, Converge Nodes') {
       steps {
-      withCredentials([zip(credentialsId: 'chef-starter.zip', variable: 'CHEFREPO')]) {
-          sh "chef install $WORKSPACE/Policyfile.rb -c $CHEFREPO/chef-repo/.chef/config.rb"
-          sh "chef push prod $WORKSPACE/Policyfile.lock.json -c $CHEFREPO/chef-repo/.chef/config.rb"
-          withCredentials([sshUserPrivateKey(credentialsId: 'agent-key', keyFileVariable: 'agentKey')]) {
-            sh "knife ssh 'policy_name:apache' -x ubuntu -i $agentKey 'sudo chef-client' -c $CHEFREPO/chef-repo/.chef/config.rb"
+        withCredentials([zip(credentialsId: 'chef-starter.zip', variable: 'CHEFREPO')]) {
+            sh "chef install $WORKSPACE/Policyfile.rb -c $CHEFREPO/chef-repo/.chef/config.rb"
+            sh "sudo chef push prod $WORKSPACE/Policyfile.lock.json -c $CHEFREPO/chef-repo/.chef/config.rb"
+            withCredentials([sshUserPrivateKey(credentialsId: 'agent-key', keyFileVariable: 'agentKey')]) {
+              sh "knife ssh 'policy_name:apache' -x ubuntu -i $agentKey 'sudo chef-client' -c $CHEFREPO/chef-repo/.chef/config.rb"
+            }
           }
-        }
       }
     }
   }
