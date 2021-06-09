@@ -12,7 +12,7 @@ end
 
 describe file ('/var/www/html/index.html') do
   it { should exist }
-  its('content') { should match (/HDevops End To End !!!/) }
+  its('content') { should match (/Devops End To End !!!/) }
 end
 
 describe upstart_service('apache2') do
