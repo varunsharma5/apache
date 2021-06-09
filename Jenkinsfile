@@ -52,10 +52,5 @@ pipeline {
         sh 'sudo kitchen verify'
       }
     }
-    stage ('Run Kitchen Destroy') {
-      steps {
-        sh 'sudo kitchen destroy'
-      }
-    }
   }
 }
