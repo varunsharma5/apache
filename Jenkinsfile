@@ -26,7 +26,7 @@ pipeline {
         git credentialsId: 'git-repo-creds', url: 'git@github.com:varunsharma5/apache.git'
       }
     }
-    stage {
+    stage ('Install Kitchen Docker gem') {
       stpes {
         sh 'sudo apt-get install -y make gcc'
         sh 'sudo chef gem install kitchen-docker'
