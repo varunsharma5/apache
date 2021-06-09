@@ -27,7 +27,7 @@ pipeline {
       }
     }
     stage ('Install Kitchen Docker gem') {
-      stpes {
+      steps {
         sh 'sudo apt-get install -y make gcc'
         sh 'sudo chef gem install kitchen-docker'
       }
