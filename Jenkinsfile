@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage ('Delete the workspace') {
       steps{
-        sh 'sudo rm -rf /opt/jenkins/workspace/*'
+        cleanWs()
       }
     }
     stage ('Installing Chef Workstation') {
