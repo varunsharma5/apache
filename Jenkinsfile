@@ -63,6 +63,10 @@ pipeline {
       }
     }
   }
+  post {
+    success {
+      slackSend color: 'warning', message: "Build $JOB_NAME $BUILD_NUMBER was successful! :)"
+    } failure {
+      slackSend color: 'error', message: "Build $JOB_NAME $BUILD_NUMBER Failed :("
+  }
 }
-
-slackSend color: 'warning', messsage: "Mr. Varun: Please approve ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JOB_URL} | Open>)"
