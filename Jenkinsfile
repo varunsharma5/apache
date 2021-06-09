@@ -67,6 +67,7 @@ pipeline {
     }
     */
     stage ('Upload to Chef Infra Server, Converge Nodes') {
+
       steps {
         withCredentials([zip(credentialsId: 'chef-starter.zip', variable: 'CHEFREPO')]) {
             sh "chef install $WORKSPACE/Policyfile.rb -c $CHEFREPO/chef-repo/.chef/config.rb"
