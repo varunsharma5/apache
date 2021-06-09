@@ -9,7 +9,7 @@ pipeline {
     stage ('Installing Chef Workstation') {
       steps {
         script {
-          def exists = fileExists '/usr/bin.chef-client'
+          def exists = fileExists '/usr/bin/chef-client'
           if(exists == true) {
             echo 'Skipping Chef Workstation install - already installed'
           } else {
