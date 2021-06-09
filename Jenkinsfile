@@ -68,5 +68,6 @@ pipeline {
       slackSend color: 'warning', message: "Build $JOB_NAME $BUILD_NUMBER was successful! :)"
     } failure {
       slackSend color: 'error', message: "Build $JOB_NAME $BUILD_NUMBER Failed :("
+    }
   }
 }
