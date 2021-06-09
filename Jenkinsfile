@@ -52,5 +52,17 @@ pipeline {
         sh 'sudo kitchen verify'
       }
     }
+    stage ('Send Slack notification') {
+      steps {
+        slackSend color: 'warning', message: "Mr Varun: Please approve ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JOB_URL} | Open>)"
+      }
+    }
+    stage ('Request Input') {
+      steps {
+        input 'Please approve the build'
+      }
+    }
   }
 }
+
+slackSend color: 'warning', messsage: "Mr. Varun: Please approve ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JOB_URL} | Open>)"
